@@ -11,21 +11,31 @@
   {% else %}
     <a href="{{ url_for('public_view') }}">public view</a> |
     <a href="{{ url_for('register') }}">sign up</a> |
-    <a href="{{ url_for('login') }}">sign in</a> |
-    <a href="{{ url_for('forget_passwd') }}">forget password</a>
+    <a href="{{ url_for('login') }}">sign in</a>
   {% endif %}
   </div>
-  {% with flashes = get_flashed_messages() %}
-    {% if flashes %}
-      <ul class="flashes">
-      {% for message in flashes %}
-        <li>{{ message }}
-      {% endfor %}
-      </ul>
-    {% endif %}
-  {% endwith %}
   <div class="body">
-  {% block body %}{% endblock %}
+    <div class="sidebar">
+      <div class="searchbox">
+        <h3>Quick Search</h3>
+        <form class="search" method="get">
+          <input type="text" name="quick_search" size="15">
+          <input type="submit" value="Go">
+        </form>
+      </div>
+    </div>
+    <div class="content">
+      {% with flashes = get_flashed_messages() %}
+        {% if flashes %}
+          <ul class="flashes">
+	    {% for message in flashes %}
+	      <li>{{ message }}
+	    {% endfor %}
+	  </ul>
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </div>
   </div>
   <div class="footer">
     CloudAcct, Powered by Anyware.
