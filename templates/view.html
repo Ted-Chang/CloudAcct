@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block title %}
+  {% if request.endpoint == 'public_view' %}
+    Public View
+  {% elif request.endpoint == 'user_view' %}
+    {{ profile_user.username }}'s View
+  {% else %}
+    My View
+  {% endif %}
+{% endblock %}
+{% block body %}
+  <h2>{{ self.title() }}</h2>
+  {% if g.user %}
+    {% if request.endpoint == 'user_view' %}
+      <div class="followstatus">
+      {% if g.user.user_id == profile_user.user_id %}
+        This is you!
+      {% else %}
+        You are not yet following this user.
+      {% endif %}
+      </div>
+    {% elif request.endpoint == 'view' %}
+    {% endif %}
+  {% endif %}
+{% endblock %}
