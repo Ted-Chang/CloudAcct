@@ -1,7 +1,8 @@
 # How to initialize database
 
 ```
-$ python cloud_acct.py initdb
+$ sqlite3 /tmp/cloud_acct.db < schema.sql
+
 ```
 
 # How to run?

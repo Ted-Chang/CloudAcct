@@ -2,24 +2,23 @@
 {% block title %}
   {% if request.endpoint == 'public_view' %}
     Public View
-  {% elif request.endpoint == 'user_view' %}
-    {{ profile_user.username }}'s View
   {% else %}
     My View
   {% endif %}
 {% endblock %}
 {% block content %}
   <h2>{{ self.title() }}</h2>
-  {% if g.user %}
-    {% if request.endpoint == 'user_view' %}
-      <div class="followstatus">
-      {% if g.user.user_id == profile_user.user_id %}
-        This is you!
-      {% else %}
-        You are not yet following this user.
-      {% endif %}
+  {% if request.endpoint == 'public_view' %}
+    <div class="getstarted">
+      <p>Learn CloudAcct and get started within your company!</p>
+      <a href="{{ url_for('user_guide') }}" class="button">Read the guide</a>
+      <a href="{{ url_for('register') }}" class="button">Get started</a>
+    </div>
+  {% elif request.endpoint == 'view' %}
+    {% if g.user %}
+      <div class="userconsole">
+        <h3>Projects</h3>
       </div>
-    {% elif request.endpoint == 'view' %}
     {% endif %}
   {% endif %}
 {% endblock %}

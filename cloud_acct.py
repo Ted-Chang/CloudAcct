@@ -23,6 +23,7 @@ app = Flask('__name__')
 app.config.from_object(__name__)
 app.config.from_envvar('CLOUDACCT_SETTINGS', silent=True)
 
+
 def init_db():
     """Initialize the database."""
     db = get_db()
@@ -30,11 +31,13 @@ def init_db():
         db.cursor().executescript(f.read())
     db.commit()
 
+
 @app.cli.command('initdb')
 def initdb_command():
     """Creates the database tables."""
     init_db()
     print('Database initialized.')
+
 
 def get_db():
     """
@@ -47,11 +50,13 @@ def get_db():
         top.sqlite_db.row_factory = sqlite3.Row
     return top.sqlite_db
 
+
 def query_db(query, args=(), one=False):
     """Queries the database and returns a list of dictionaries."""
     cur = get_db().execute(query, args)
     ret = cur.fetchall()
     return (ret[0] if ret else None) if one else ret
+
 
 @app.teardown_appcontext
 def close_database(exception):
@@ -60,15 +65,18 @@ def close_database(exception):
     if hasattr(top, 'sqlite_db'):
         top.sqlite_db.close()
 
+
 def format_datetime(timestamp):
     """Format a timestamp for display."""
     return datetime.utcfromtimestamp(timestamp).strftime('%Y-%m-%d @ %H:%M')
+
 
 def get_user_id(username):
     """Look up the id for a username."""
     ret = query_db('select user_id from user where username = ?',
                    [username], one=True)
     return ret[0] if ret else None
+
 
 @app.before_request
 def before_request():
@@ -77,6 +85,7 @@ def before_request():
         g.user = query_db('select * from user where user_id = ?', 
                           [session['user_id']], one=True)
 
+
 @app.route('/')
 def view():
     if not g.user:
@@ -84,19 +93,20 @@ def view():
     error = None
     return render_template('view.html', error=error)
 
+
 @app.route('/public')
 def public_view():
     """Displays the latest view of all users."""
     error = None
     return render_template('view.html', error=error)
 
-@app.route('/<username>')
-def user_view(username):
-    """Displays a user's view."""
-    profile_user = None
-    if profile_user is None:
-        abort(404)
-    return render_template('view.html', profile_user=profile_user)
+
+@app.route('/user_guide')
+def user_guide():
+    """Displays the user guide."""
+    error = None
+    return render_template('userguide.html', error=error)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -126,6 +136,7 @@ def register():
             return redirect(url_for('login'))
     return render_template('register.html', error=error)
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """Logs the user in."""
@@ -145,6 +156,7 @@ def login():
             session['user_id'] = user['user_id']
             return redirect(url_for('view'))
     return render_template('login.html', error=error)
+
 
 @app.route('/forget_passwd', methods=['GET', 'POST'])
 def forget_passwd():
@@ -173,12 +185,14 @@ def forget_passwd():
             return redirect(url_for('login'))
     return render_template('forgetpasswd.html', error=error)
 
+
 @app.route('/logout')
 def logout():
     """Logs the user out."""
     flash('You were logged out!')
     session.pop('user_id', None)
     return redirect(url_for('public_view'))
+
 
 port = os.getenv('PORT', '8080')
 if __name__ == "__main__":

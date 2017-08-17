@@ -57,9 +57,9 @@ div.page div.navigation {
     background: #DEE9E8;
     padding: 4px 10px;
     border-top: 1px solid #ccc;
-    border-bottom: 1px solid #eee
+    border-bottom: 1px solid #eee;
     color: #888;
-    font-size: 12px
+    font-size: 12px;
     letter-spacing: 0.5px;
 }
 
@@ -87,7 +87,13 @@ div.page div.body div.sidebar {
     overflow-wrap: break-word;
 }
 
+div.page div.body div.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
 div.page div.body div.sidebar div.searchbox {
+    border-top: 1px solid lightgray;
     width: 210px;
 }
 
@@ -104,7 +110,28 @@ div.page div.footer {
     font-size: 12px;
 }
 
-div.page div.followstatus {
+div.page div.body div.content div.getstarted {
+    margin-right: 15px;
+    border: 1px solid #ccc;
+    background: #E3EBEA;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    padding: 3px;
+    font-size: 13px;
+}
+
+div.page div.body div.content div.getstarted .button {
+    background: #4CAF50;
+    border: none;
+    color: white;
+    text-align: center;
+    font-size: 14px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+div.page div.body div.content div.userconsole {
+    margin-right: 15px;
     border: 1px solid #ccc;
     background: #E3EBEA;
     -moz-border-radius: 2px;
