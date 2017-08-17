@@ -6,3 +6,11 @@ create table user (
   pw_hash text not null
 );
 
+drop table if exists project;
+create table project (
+  project_id integer primary key autoincrement,
+  project_name text not null,
+  owner_id integer not null,
+  company_name text not null,
+  tax_id text not null
+);

@@ -88,10 +88,17 @@ def before_request():
 
 @app.route('/')
 def view():
+    """
+    Show a user's project view or if no user is logged in redirect
+    to the public view. 
+    """
     if not g.user:
         return redirect(url_for('public_view'))
-    error = None
-    return render_template('view.html', error=error)
+    projects=query_db('''
+        select project.* from project
+        where project.owner_id = ?''', 
+                      [session['user_id']])
+    return render_template('view.html', projects=projects)
 
 
 @app.route('/public')
@@ -135,6 +142,31 @@ def register():
             flash('You were successfully registered!')
             return redirect(url_for('login'))
     return render_template('register.html', error=error)
+
+@app.route('/create_project', methods=['GET', 'POST'])
+def create_project():
+    """Create the project for specified user."""
+    if not g.user:
+        return redirect(url_for('login'))
+    error = None
+    if request.method == 'POST':
+        if not request.form['project_name']:
+            error = 'Please specify a project name'
+        elif not request.form['company_name']:
+            error = 'Please specify the company name'
+        elif not request.form['tax_id']:
+            error = 'Please specify the tax ID of the company'
+        else:
+            db = get_db()
+            db.execute('''insert into project (
+                       project_name, owner_id, company_name, tax_id)
+                       values (?, ?, ?, ?)''', 
+                       [request.form['project_name'], session['user_id'], 
+                        request.form['company_name'], request.form['tax_id']])
+            db.commit()
+            flash('Project created successfully!')
+            return redirect(url_for('view'))
+    return render_template('createproject.html', error=error)
 
 
 @app.route('/login', methods=['GET', 'POST'])

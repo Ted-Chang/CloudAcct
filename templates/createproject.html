@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block title %}Create Project{% endblock %}
+{% block content %}
+  <h2>Create Project</h2>
+  {% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
+  <form action="" method="post">
+    <dl>
+      <dt>Project Name:
+      <dd><input type="text" name="project_name" size="30" value="{{ request.form.project_name }}">
+      <dt>Company Name:
+      <dd><input type="text" name="company_name" size="30" value="{{ request.form.company_name }}">
+      <dt>Tax ID:
+      <dd><input type="text" name="tax_id" size="30" value="{{ request.form.tax_id }}">
+    </dl>
+    <div class="action"><input type="submit" value="Create"></div>
+  </form>
+{% endblock %}
