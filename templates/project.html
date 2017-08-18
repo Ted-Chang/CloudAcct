@@ -16,31 +16,56 @@
     {% endif %}
   </div>
   <div class="body">
-    {% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
     {% if g.user and project %}
       <div class="project_banner">
-	<a href="{{ url_for('.show_user', username=g.user['username']) }}">{{ g.user.username }}</a>/
+	<a href="{{ url_for('.show_user', username=g.user['username']) }}" >{{ g.user.username }}</a>/
 	<a href="{{ url_for('.show_project', username=g.user['username'], project_name=project['project_name']) }}">{{ project['project_name'] }}</a>
       </div>
-      <div class="project_detail">
-	<table>
-	  <tr>
-	    <td>Company</td><td>{{ project['company_name'] }}</td>
-	  </tr>
-	  <tr>
-	    <td>Tax ID</td><td>{{ project['tax_id'] }}</td>
-	  </tr>
-	  <tr>
-	    <td>Bank</td><td>{{ project['bank_name'] }}</td>
-	  </tr>
-	  <tr>
-	    <td>Bank Account</td><td>{{ project['bank_account'] }}</td>
-	  </tr>
-	  <tr>
-	    <td>Address</td><td>{{ project['company_address'] }}</td>
-	  </tr>
-	</table>
+      <div class="project_toolbar">
+	<a href="{{ url_for('.show_project', username=g.user['username'], project_name=project['project_name']) }}">Detail</a>
+	<a href="{{ url_for('.show_project_settings', username=g.user['username'], project_name=project['project_name'])}}">Settings</a>
       </div>
+      {% if request.endpoint == 'show_project' %}
+        <div class="project_detail">
+	  <table>
+	    <tr>
+	      <td>Company</td><td>{{ project['company_name'] }}</td>
+	    </tr>
+	    <tr>
+	      <td>Tax ID</td><td>{{ project['tax_id'] }}</td>
+	    </tr>
+	    <tr>
+	      <td>Bank</td><td>{{ project['bank_name'] }}</td>
+	    </tr>
+	    <tr>
+	      <td>Bank Account</td><td>{{ project['bank_account'] }}</td>
+	    </tr>
+	    <tr>
+	      <td>Address</td><td>{{ project['company_address'] }}</td>
+	    </tr>
+	  </table>
+	</div>
+      {% elif request.endpoint == 'show_project_settings' %}
+	<div class="project_settings">
+	  {% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
+	  {% with flashes = get_flashed_messages() %}
+	    {% if flashes %}
+	      <ul class="flashes">
+		{% for message in flashes %}
+		  <li>{{ message }}
+		{% endfor %}
+	      </ul>
+	    {% endif %}
+	  {% endwith %}
+	  <p>Project name</p>
+	  <form action="" method="post">
+	    <input type="text" name="project_name" size="30" value="{{ request.form.project_name }}">
+	    <input type="submit" value="Rename">
+	  </form>
+	</div>
+      {% endif %}
+    {% else %}
+      {% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
     {% endif %}
   </div>
   <div class="footer">

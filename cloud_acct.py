@@ -167,14 +167,14 @@ def create_project():
             return redirect(url_for('.show_user', username=g.user['username']))
     return render_template('createproject.html', error=error)
 
+
 @app.route('/<username>')
 def show_user(username):
     """Show info of the specified user."""
     if not g.user or g.user['username'] != username:
         return redirect(url_for('login'))
     projects=query_db('''
-        select project.* from project
-        where project.owner_id = ?''', 
+        select * from project where owner_id = ?''', 
                           [session['user_id']])
     return render_template('view.html', projects=projects)
 
@@ -184,14 +184,46 @@ def show_project(username, project_name):
     """Show info of the specified project owned by the specified user."""
     if not g.user or g.user['username'] != username:
         return redirect(url_for('login'))
-    projects=query_db('''
-        select project.* from project
-        where project.owner_id = ? and project_name = ?''',
-                      [session['user_id'], project_name])
-    if not projects:
+    project=query_db('''
+        select * from project
+        where owner_id = ? and project_name = ?''',
+                     [session['user_id'], project_name])
+    if not project:
         error = 'Invalid project name'
     else:
-        return render_template('project.html', project=projects[0])
+        return render_template('project.html', project=project[0])
+    return render_template('project.html', error=error)
+
+
+@app.route('/<username>/<project_name>/settings', methods=['GET', 'POST'])
+def show_project_settings(username, project_name):
+    """Show settings of the specified project owned by the specified user."""
+    if not g.user or g.user['username'] != username:
+        return redirect(url_for('login'))
+    project=query_db('''
+        select * from project
+        where owner_id = ? and project_name = ?''', 
+                     [session['user_id'], project_name])
+    if not project:
+        error = 'Invalid project name'
+    else:
+        if request.method == 'POST':
+            if not request.form['project_name']:
+                error = 'Invalid project name'
+            elif request.form['project_name'] == project_name:
+                error = 'Project name not changed'
+            else:
+                new_project_name = request.form['project_name']
+                db = get_db()
+                db.execute('''update project set project_name = ?
+                           where owner_id = ? and project_name = ?''', 
+                           [new_project_name, session['user_id'], project_name])
+                db.commit()
+                flash('Project name updated!')
+                return redirect(url_for('.show_project_settings',
+                                        username=username,
+                                        project_name=new_project_name))
+        return render_template('project.html', project=project[0])
     return render_template('project.html', error=error)
 
 

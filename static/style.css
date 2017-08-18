@@ -104,21 +104,36 @@ div.page div.body div.content {
 }
 
 div.page div.body div.project_banner {
-    border-bottom: 1px solid lightgray;
+    font-size: 20px;
+    padding-left: 10px;
 }
 
-div.page div.body div.project_banner a {
-    font-size: 20px;
+div.page div.body div.project_toolbar {
+    border-bottom: 1px solid lightgray;
+    font-size: 16px;
+    padding-left: 10px;
+    margin-top: 10px;
+}
+
+div.page div.body div.project_toolbar a {
+    margin-right: 10px;
 }
 
 div.page div.body div.project_detail {
-    margin: 15px;
-    border: 1px solid lightgray;
+    margin: 10px;
 }
 
 div.page div.body div.project_detail table,td {
     border: 1px solid lightgray;
-    width: 40%;
+    width: 50%;
+}
+
+div.page div.body div.project_detail table {
+    border-collapse: collapse;
+}
+
+div.page div.body div.project_settings {
+    margin: 10px;
 }
 
 div.page div.footer {
