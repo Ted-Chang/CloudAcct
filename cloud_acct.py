@@ -77,6 +77,13 @@ def get_user_id(username):
                    [username], one=True)
     return ret[0] if ret else None
 
+def get_project_id(user_id, project_name):
+    """Look up the id for a project of the specified user."""
+    ret = query_db('''select project_id from project where owner_id = ?
+                   and project_name = ?''', 
+                   [user_id, project_name], one=True)
+    return ret[0] if ret else None
+
 
 @app.before_request
 def before_request():
@@ -87,25 +94,11 @@ def before_request():
 
 
 @app.route('/')
-def view():
+def index():
     """
-    Show a user's project view or if no user is logged in redirect
-    to the public view. 
+    All request to root go the public view. 
     """
-    if not g.user:
-        return redirect(url_for('public_view'))
-    projects=query_db('''
-        select project.* from project
-        where project.owner_id = ?''', 
-                      [session['user_id']])
-    return render_template('view.html', projects=projects)
-
-
-@app.route('/public')
-def public_view():
-    """Displays the latest view of all users."""
-    error = None
-    return render_template('view.html', error=error)
+    return render_template('view.html')
 
 
 @app.route('/user_guide')
@@ -119,7 +112,7 @@ def user_guide():
 def register():
     """Register the user."""
     if g.user:
-        return redirect(url_for('view'))
+        return redirect(url_for('.show_user', username=g.user['username']))
     error = None
     if request.method == 'POST':
         if not request.form['username']:
@@ -143,6 +136,7 @@ def register():
             return redirect(url_for('login'))
     return render_template('register.html', error=error)
 
+
 @app.route('/create_project', methods=['GET', 'POST'])
 def create_project():
     """Create the project for specified user."""
@@ -156,24 +150,56 @@ def create_project():
             error = 'Please specify the company name'
         elif not request.form['tax_id']:
             error = 'Please specify the tax ID of the company'
+        elif get_project_id(session['user_id'], 
+                            request.form['project_name']) is not None:
+            error = 'The project name is already taken'
         else:
             db = get_db()
             db.execute('''insert into project (
-                       project_name, owner_id, company_name, tax_id)
-                       values (?, ?, ?, ?)''', 
+                       project_name, owner_id, company_name, tax_id, bank_name, bank_account, company_address)
+                       values (?, ?, ?, ?, ?, ?, ?)''', 
                        [request.form['project_name'], session['user_id'], 
-                        request.form['company_name'], request.form['tax_id']])
+                        request.form['company_name'], request.form['tax_id'], 
+                        request.form['bank_name'], request.form['bank_account'], 
+                        request.form['company_address']])
             db.commit()
             flash('Project created successfully!')
-            return redirect(url_for('view'))
+            return redirect(url_for('.show_user', username=g.user['username']))
     return render_template('createproject.html', error=error)
+
+@app.route('/<username>')
+def show_user(username):
+    """Show info of the specified user."""
+    if not g.user or g.user['username'] != username:
+        return redirect(url_for('login'))
+    projects=query_db('''
+        select project.* from project
+        where project.owner_id = ?''', 
+                          [session['user_id']])
+    return render_template('view.html', projects=projects)
+
+
+@app.route('/<username>/<project_name>')
+def show_project(username, project_name):
+    """Show info of the specified project owned by the specified user."""
+    if not g.user or g.user['username'] != username:
+        return redirect(url_for('login'))
+    projects=query_db('''
+        select project.* from project
+        where project.owner_id = ? and project_name = ?''',
+                      [session['user_id'], project_name])
+    if not projects:
+        error = 'Invalid project name'
+    else:
+        return render_template('project.html', project=projects[0])
+    return render_template('project.html', error=error)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """Logs the user in."""
     if g.user:
-        return redirect(url_for('view'))
+        return redirect(url_for('.show_user', username=g.user['username']))
     error = None
     if request.method == 'POST':
         user = query_db('''select * from user where username = ?''',
@@ -186,15 +212,13 @@ def login():
         else:
             flash('You were logged in!')
             session['user_id'] = user['user_id']
-            return redirect(url_for('view'))
+            return redirect(url_for('.show_user', username=user['username']))
     return render_template('login.html', error=error)
 
 
 @app.route('/forget_passwd', methods=['GET', 'POST'])
 def forget_passwd():
     """Get back the user password."""
-    if g.user:
-        return redirect(url_for('view'))
     error = None
     if request.method == 'POST':
         if not request.form['username']:
@@ -223,7 +247,7 @@ def logout():
     """Logs the user out."""
     flash('You were logged out!')
     session.pop('user_id', None)
-    return redirect(url_for('public_view'))
+    return redirect(url_for('.index'))
 
 
 port = os.getenv('PORT', '8080')

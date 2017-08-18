@@ -4,16 +4,16 @@
 <div class="page">
   <h1>CloudAcct</h1>
   <div class="navigation">
-  {% if g.user %}
-    <a href="{{ url_for('view') }}">my view</a> |
-    <a href="{{ url_for('public_view') }}">public view</a> |
-    <a href="{{ url_for('logout') }}">sign out [{{ g.user.username }}]</a> |
-    <a href="{{ url_for('create_project') }}">create project</a>
-  {% else %}
-    <a href="{{ url_for('public_view') }}">public view</a> |
-    <a href="{{ url_for('register') }}">sign up</a> |
-    <a href="{{ url_for('login') }}">sign in</a>
-  {% endif %}
+    {% if g.user %}
+      <a href="{{ url_for('.show_user', username=g.user['username']) }}">my view</a> |
+      <a href="{{ url_for('.index') }}">public view</a> |
+      <a href="{{ url_for('logout') }}">sign out [{{ g.user.username }}]</a> |
+      <a href="{{ url_for('create_project') }}">create project</a>
+    {% else %}
+      <a href="{{ url_for('.index') }}">public view</a> |
+      <a href="{{ url_for('register') }}">sign up</a> |
+      <a href="{{ url_for('login') }}">sign in</a>
+    {% endif %}
   </div>
   <div class="body">
     <div class="sidebar">
@@ -21,7 +21,7 @@
       <p>CloudAcct is a cloud app for providing accountant service.</p>
       <h3>Useful link</h3>
       <ul>
-	<li><a href="{{ url_for('view') }}">The cloud accountant website</a></li>
+	<li><a href="{{ url_for('.index') }}">The cloud accountant website</a></li>
 	<li><a href="https://github.com/Ted-Chang/CloudAcct">CloudAcct @ github</a></li>
 	<li><a href="https://github.com/Ted-Chang/CloudAcct/issues">Issue Tracker</a></li>
       </ul>

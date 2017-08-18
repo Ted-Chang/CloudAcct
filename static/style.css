@@ -103,6 +103,24 @@ div.page div.body div.content {
     overflow: hidden;
 }
 
+div.page div.body div.project_banner {
+    border-bottom: 1px solid lightgray;
+}
+
+div.page div.body div.project_banner a {
+    font-size: 20px;
+}
+
+div.page div.body div.project_detail {
+    margin: 15px;
+    border: 1px solid lightgray;
+}
+
+div.page div.body div.project_detail table,td {
+    border: 1px solid lightgray;
+    width: 40%;
+}
+
 div.page div.footer {
     background: #eee;
     color: #888

@@ -12,5 +12,8 @@ create table project (
   project_name text not null,
   owner_id integer not null,
   company_name text not null,
-  tax_id text not null
+  tax_id text not null,
+  bank_name text,
+  bank_account text,
+  company_address text
 );

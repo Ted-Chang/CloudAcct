@@ -1,0 +1,49 @@
+<!doctype html>
+<title>{% block title %}Welcome{% endblock %} | Cloud Accountant</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+<div class="page">
+  <h1>CloudAcct</h1>
+  <div class="navigation">
+    {% if g.user %}
+      <a href="{{ url_for('.show_user', username=g.user['username']) }}">my view</a> |
+      <a href="{{ url_for('.index') }}">public view</a> |
+      <a href="{{ url_for('logout') }}">sign out [{{ g.user.username }}]</a> |
+      <a href="{{ url_for('create_project') }}">create project</a>
+    {% else %}
+      <a href="{{ url_for('.index') }}">public view</a> |
+      <a href="{{ url_for('register') }}">sign up</a> |
+      <a href="{{ url_for('login') }}">sign in</a>
+    {% endif %}
+  </div>
+  <div class="body">
+    {% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
+    {% if g.user and project %}
+      <div class="project_banner">
+	<a href="{{ url_for('.show_user', username=g.user['username']) }}">{{ g.user.username }}</a>/
+	<a href="{{ url_for('.show_project', username=g.user['username'], project_name=project['project_name']) }}">{{ project['project_name'] }}</a>
+      </div>
+      <div class="project_detail">
+	<table>
+	  <tr>
+	    <td>Company</td><td>{{ project['company_name'] }}</td>
+	  </tr>
+	  <tr>
+	    <td>Tax ID</td><td>{{ project['tax_id'] }}</td>
+	  </tr>
+	  <tr>
+	    <td>Bank</td><td>{{ project['bank_name'] }}</td>
+	  </tr>
+	  <tr>
+	    <td>Bank Account</td><td>{{ project['bank_account'] }}</td>
+	  </tr>
+	  <tr>
+	    <td>Address</td><td>{{ project['company_address'] }}</td>
+	  </tr>
+	</table>
+      </div>
+    {% endif %}
+  </div>
+  <div class="footer">
+    CloudAcct, Powered by Anyware.
+  </div>
+</div>
