@@ -2,17 +2,17 @@
 <title>{% block title %}Welcome{% endblock %} | Cloud Accountant</title>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 <div class="page">
-  <h1>CloudAcct</h1>
+  <h1 id="band">CloudAcct</h1>
   <div class="navigation">
     {% if g.user %}
-      <a href="{{ url_for('.show_user', username=g.user['username']) }}">my view</a> |
-      <a href="{{ url_for('.index') }}">public view</a> |
-      <a href="{{ url_for('logout') }}">sign out [{{ g.user.username }}]</a> |
-      <a href="{{ url_for('create_project') }}">create project</a>
+      <a id="navigation-link" href="{{ url_for('.show_user', username=g.user['username']) }}">my view</a> |
+      <a id="navigation-link" href="{{ url_for('.index') }}">public view</a> |
+      <a id="navigation-link" href="{{ url_for('logout') }}">sign out [{{ g.user.username }}]</a> |
+      <a id="navigation-link" href="{{ url_for('create_project') }}">create project</a>
     {% else %}
-      <a href="{{ url_for('.index') }}">public view</a> |
-      <a href="{{ url_for('register') }}">sign up</a> |
-      <a href="{{ url_for('login') }}">sign in</a>
+      <a id="navigation-link" href="{{ url_for('.index') }}">public view</a> |
+      <a id="navigation-link" href="{{ url_for('register') }}">sign up</a> |
+      <a id="navigation-link" href="{{ url_for('login') }}">sign in</a>
     {% endif %}
   </div>
   <div class="body">

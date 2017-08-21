@@ -4,12 +4,56 @@ body {
     font-size: 14px;
 }
 
+#band {
+    background: #6ECCC4;
+    margin: 0;
+    padding: 10px 14px;
+    color: white;
+    letter-spacing: 1px;
+    text-shadow: 0 0 3px #24776F;
+    font-weight: normal;
+}
+
+#navigation-link {
+    color: #444;
+    font-weight: bold;
+}
+
+#page-title {
+    color: #105751;
+    text-shadow: 0 1px 2px #ccc;
+}
+
+#cloud-acct-bold {
+    font-weight: bold;
+}
+
 a {
     color: #26776F;
 }
 
 a:hover {
     color: #333;
+}
+
+.table {
+    border-collapse: collapse;
+    border: 1px solid lightgray;
+}
+
+.button {
+    background: #4CAF50;
+    border: none;
+    color: white;
+    text-align: center;
+    font-size: 14px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.button: hover {
+    color: #000!important;
+    background-color: #ccc!important;
 }
 
 input[type="text"],
@@ -40,17 +84,7 @@ div.page {
     background: white;
     border: 1px solid #6ECCC4;
     width: 900px;
-    margin: 30px auto;
-}
-
-div.page h1 {
-    background: #6ECCC4;
-    margin: 0;
-    padding: 10px 14px;
-    color: white;
-    letter-spacing: 1px;
-    text-shadow: 0 0 3px #24776F;
-    font-weight: normal;
+    margin: auto;
 }
 
 div.page div.navigation {
@@ -61,16 +95,6 @@ div.page div.navigation {
     color: #888;
     font-size: 12px;
     letter-spacing: 0.5px;
-}
-
-div.page div.navigation a {
-    color: #444;
-    font-weight: bold;
-}
-
-div.page h2 {
-    color: #105751;
-    text-shadow: 0 1px 2px #ccc;
 }
 
 div.page div.body {
@@ -115,21 +139,12 @@ div.page div.body div.project_toolbar {
     margin-top: 10px;
 }
 
-div.page div.body div.project_toolbar a {
+#toolbar-link {
     margin-right: 10px;
 }
 
 div.page div.body div.project_detail {
     margin: 10px;
-}
-
-div.page div.body div.project_detail table,td {
-    border: 1px solid lightgray;
-    width: 50%;
-}
-
-div.page div.body div.project_detail table {
-    border-collapse: collapse;
 }
 
 div.page div.body div.project_settings {
@@ -156,16 +171,6 @@ div.page div.body div.content div.getstarted {
     -webkit-border-radius: 2px;
     padding: 3px;
     font-size: 13px;
-}
-
-div.page div.body div.content div.getstarted .button {
-    background: #4CAF50;
-    border: none;
-    color: white;
-    text-align: center;
-    font-size: 14px;
-    display: inline-block;
-    cursor: pointer;
 }
 
 div.page div.body div.content div.userconsole {

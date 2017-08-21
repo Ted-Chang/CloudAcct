@@ -2,17 +2,17 @@
 <title>{% block title %}Welcome{% endblock %} | Cloud Accountant</title>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 <div class="page">
-  <h1>CloudAcct</h1>
+  <h1 id="band">CloudAcct</h1>
   <div class="navigation">
     {% if g.user %}
-      <a href="{{ url_for('.show_user', username=g.user['username']) }}">my view</a> |
-      <a href="{{ url_for('.index') }}">public view</a> |
-      <a href="{{ url_for('logout') }}">sign out [{{ g.user.username }}]</a> |
-      <a href="{{ url_for('create_project') }}">create project</a>
+      <a id="navigation-link" href="{{ url_for('.show_user', username=g.user['username']) }}">my view</a> |
+      <a id="navigation-link" href="{{ url_for('.index') }}">public view</a> |
+      <a id="navigation-link" href="{{ url_for('logout') }}">sign out [{{ g.user.username }}]</a> |
+      <a id="navigation-link" href="{{ url_for('create_project') }}">create project</a>
     {% else %}
-      <a href="{{ url_for('.index') }}">public view</a> |
-      <a href="{{ url_for('register') }}">sign up</a> |
-      <a href="{{ url_for('login') }}">sign in</a>
+      <a id="navigation-link" href="{{ url_for('.index') }}">public view</a> |
+      <a id="navigation-link" href="{{ url_for('register') }}">sign up</a> |
+      <a id="navigation-link" href="{{ url_for('login') }}">sign in</a>
     {% endif %}
   </div>
   <div class="body">
@@ -22,27 +22,17 @@
 	<a href="{{ url_for('.show_project', username=g.user['username'], project_name=project['project_name']) }}">{{ project['project_name'] }}</a>
       </div>
       <div class="project_toolbar">
-	<a href="{{ url_for('.show_project', username=g.user['username'], project_name=project['project_name']) }}">Detail</a>
-	<a href="{{ url_for('.show_project_settings', username=g.user['username'], project_name=project['project_name'])}}">Settings</a>
+	<a id="toolbar-link" href="{{ url_for('.show_project', username=g.user['username'], project_name=project['project_name']) }}">Detail</a>
+	<a id="toolbar-link" href="{{ url_for('.show_project_settings', username=g.user['username'], project_name=project['project_name'])}}">Settings</a>
       </div>
       {% if request.endpoint == 'show_project' %}
         <div class="project_detail">
-	  <table>
-	    <tr>
-	      <td>Company</td><td>{{ project['company_name'] }}</td>
-	    </tr>
-	    <tr>
-	      <td>Tax ID</td><td>{{ project['tax_id'] }}</td>
-	    </tr>
-	    <tr>
-	      <td>Bank</td><td>{{ project['bank_name'] }}</td>
-	    </tr>
-	    <tr>
-	      <td>Bank Account</td><td>{{ project['bank_account'] }}</td>
-	    </tr>
-	    <tr>
-	      <td>Address</td><td>{{ project['company_address'] }}</td>
-	    </tr>
+	  <table class="table">
+	    <tr><td class="table" id="cloud-acct-bold">Company</td><td class="table">{{ project['company_name'] }}</td></tr>
+	    <tr><td class="table" id="cloud-acct-bold">Tax ID</td><td class="table">{{ project['tax_id'] }}</td></tr>
+	    <tr><td class="table" id="cloud-acct-bold">Bank</td><td class="table">{{ project['bank_name'] }}</td></tr>
+	    <tr><td class="table" id="cloud-acct-bold">Bank Account</td><td class="table">{{ project['bank_account'] }}</td></tr>
+	    <tr><td class="table" id="cloud-acct-bold">Address</td><td class="table">{{ project['company_address'] }}</td></tr>
 	  </table>
 	</div>
       {% elif request.endpoint == 'show_project_settings' or request.endpoint == 'rename_project' %}
@@ -57,12 +47,12 @@
 	      </ul>
 	    {% endif %}
 	  {% endwith %}
-	  <p>Project name</p>
+	  <p id="cloud-acct-bold">Project name</p>
 	  <form action="rename" method="post">
 	    <input type="text" name="project_name" size="30" value="{{ request.form.project_name }}">
 	    <input type="submit" value="Rename">
 	  </form>
-	  <p>Danger Zone</p>
+	  <p id="cloud-acct-bold">Danger Zone</p>
 	  <div class="danger_zone">
 	    <p>Once you delete a project, there is no going back. Please be certain.</p>
 	    <form action="delete" method="post">

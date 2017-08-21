@@ -7,7 +7,7 @@
   {% endif %}
 {% endblock %}
 {% block content %}
-  <h2>{{ self.title() }}</h2>
+  <h2 id="page-title">{{ self.title() }}</h2>
   {% if request.endpoint == 'index' %}
     <div class="getstarted">
       <p>Learn CloudAcct and get started within your company!</p>

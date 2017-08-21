@@ -7,10 +7,12 @@
 """
 import os
 import time
+import markdown
+import urllib
 from sqlite3 import dbapi2 as sqlite3
 from datetime import datetime
 from flask import Flask, request, render_template, g, redirect, \
-     url_for, abort, session, _app_ctx_stack, flash
+     url_for, abort, session, _app_ctx_stack, flash, Markup
 from werkzeug import generate_password_hash, check_password_hash
 
 # Configuration
@@ -104,8 +106,11 @@ def index():
 @app.route('/user_guide')
 def user_guide():
     """Displays the user guide."""
-    error = None
-    return render_template('userguide.html', error=error)
+    link = "https://raw.githubusercontent.com/Ted-Chang/CloudAcctDoc/master/UserGuide.md"
+    f = urllib.urlopen(link)
+    content = f.read()
+    content = Markup(markdown.markdown(content))
+    return render_template('userguide.html', **locals())
 
 
 @app.route('/register', methods=['GET', 'POST'])
