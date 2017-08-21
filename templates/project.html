@@ -45,7 +45,7 @@
 	    </tr>
 	  </table>
 	</div>
-      {% elif request.endpoint == 'show_project_settings' %}
+      {% elif request.endpoint == 'show_project_settings' or request.endpoint == 'rename_project' %}
 	<div class="project_settings">
 	  {% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
 	  {% with flashes = get_flashed_messages() %}
@@ -58,10 +58,17 @@
 	    {% endif %}
 	  {% endwith %}
 	  <p>Project name</p>
-	  <form action="" method="post">
+	  <form action="rename" method="post">
 	    <input type="text" name="project_name" size="30" value="{{ request.form.project_name }}">
 	    <input type="submit" value="Rename">
 	  </form>
+	  <p>Danger Zone</p>
+	  <div class="danger_zone">
+	    <p>Once you delete a project, there is no going back. Please be certain.</p>
+	    <form action="delete" method="post">
+	      <input type="submit" value="Delete this project">
+	    </form>
+	  </div>
 	</div>
       {% endif %}
     {% else %}

@@ -136,6 +136,11 @@ div.page div.body div.project_settings {
     margin: 10px;
 }
 
+div.page div.body div.project_settings div.danger_zone {
+    border: 1px solid red;
+    padding: 10px;
+}
+
 div.page div.footer {
     background: #eee;
     color: #888

@@ -173,9 +173,9 @@ def show_user(username):
     """Show info of the specified user."""
     if not g.user or g.user['username'] != username:
         return redirect(url_for('login'))
-    projects=query_db('''
+    projects = query_db('''
         select * from project where owner_id = ?''', 
-                          [session['user_id']])
+                        [session['user_id']])
     return render_template('view.html', projects=projects)
 
 
@@ -184,47 +184,75 @@ def show_project(username, project_name):
     """Show info of the specified project owned by the specified user."""
     if not g.user or g.user['username'] != username:
         return redirect(url_for('login'))
-    project=query_db('''
+    project = query_db('''
         select * from project
         where owner_id = ? and project_name = ?''',
                      [session['user_id'], project_name])
     if not project:
-        error = 'Invalid project name'
+        abort(404)
     else:
         return render_template('project.html', project=project[0])
-    return render_template('project.html', error=error)
 
 
-@app.route('/<username>/<project_name>/settings', methods=['GET', 'POST'])
+@app.route('/<username>/<project_name>/settings')
 def show_project_settings(username, project_name):
     """Show settings of the specified project owned by the specified user."""
     if not g.user or g.user['username'] != username:
         return redirect(url_for('login'))
-    project=query_db('''
+    project = query_db('''
         select * from project
-        where owner_id = ? and project_name = ?''', 
-                     [session['user_id'], project_name])
+        where owner_id = ? and project_name = ?''',
+                       [session['user_id'], project_name])
     if not project:
-        error = 'Invalid project name'
+        abort(404)
+    return render_template('project.html', project=project[0])
+
+
+@app.route('/<username>/<project_name>/rename', methods=['POST'])
+def rename_project(username, project_name):
+    """Rename the specified project owned by the specified user."""
+    if not g.user or g.user['username'] != username:
+        return redirect(url_for('login'))
+    error = None
+    project = query_db('''
+        select * from project
+        where owner_id = ? and project_name = ?''',
+                       [session['user_id'], project_name])
+    if not project:
+        abort(404)
     else:
-        if request.method == 'POST':
-            if not request.form['project_name']:
-                error = 'Invalid project name'
-            elif request.form['project_name'] == project_name:
-                error = 'Project name not changed'
-            else:
-                new_project_name = request.form['project_name']
-                db = get_db()
-                db.execute('''update project set project_name = ?
-                           where owner_id = ? and project_name = ?''', 
-                           [new_project_name, session['user_id'], project_name])
-                db.commit()
-                flash('Project name updated!')
-                return redirect(url_for('.show_project_settings',
-                                        username=username,
-                                        project_name=new_project_name))
-        return render_template('project.html', project=project[0])
-    return render_template('project.html', error=error)
+        if not request.form['project_name']:
+            error = 'Invalid new project name'
+            return render_template('project.html', 
+                                   project=project[0], error=error)
+        else:
+            new_project_name = request.form['project_name']
+            db = get_db()
+            db.execute('''update project set project_name = ?
+                          where owner_id = ? and project_name = ?''', 
+                       [new_project_name, session['user_id'], project_name])
+            db.commit()
+            flash('Project name updated!')
+            return redirect(url_for('.show_project_settings',
+                                    username=username,
+                                    project_name=new_project_name))
+
+
+@app.route('/<username>/<project_name>/delete', methods=['POST'])
+def delete_project(username, project_name):
+    """Delete the specified project owned by the specified user."""
+    if not g.user or g.user['username'] != username:
+        return redirect(url_for('login'))
+    if not get_project_id(session['user_id'], project_name):
+        abort(404)
+    else:
+        db = get_db()
+        db.execute('''delete from project
+                      where owner_id = ? and project_name = ?''',
+                   [session['user_id'], project_name])
+        db.commit()
+        flash('Project deleted!')
+        return redirect(url_for('.show_user', username=username))
 
 
 @app.route('/login', methods=['GET', 'POST'])
