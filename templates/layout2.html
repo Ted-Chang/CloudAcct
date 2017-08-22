@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block body %}
+  <div class="sidebar">
+    <h3>About CloudAcct</h3>
+    <p>CloudAcct is a cloud app for providing accountant service.</p>
+    <h3>Useful link</h3>
+    <ul>
+      <li><a href="{{ url_for('.index') }}">The cloud accountant website</a></li>
+      <li><a href="https://github.com/Ted-Chang/CloudAcct">CloudAcct @ github</a></li>
+      <li><a href="https://github.com/Ted-Chang/CloudAcct/issues">Issue Tracker</a></li>
+    </ul>
+    <div class="searchbox">
+      <h3>Quick Search</h3>
+      <form class="search" method="get">
+        <input type="text" class="border-radius" name="quick_search" size="15">
+        <input type="submit" class="border-radius" value="Go">
+      </form>
+    </div>
+  </div>
+
+  <div class="content">
+    {% with flashes = get_flashed_messages() %}
+      {% if flashes %}
+        <ul class="flashes">
+	  {% for message in flashes %}
+	    <li>{{ message }}
+	  {% endfor %}
+	</ul>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}
+    {% endblock %}
+  </div>
+{% endblock %}

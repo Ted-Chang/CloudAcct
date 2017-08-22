@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout2.html" %}
 {% block title %}
   {% if request.endpoint == 'index' %}
     Public View
@@ -6,20 +6,21 @@
     My View
   {% endif %}
 {% endblock %}
+
 {% block content %}
-  <h2 id="page-title">{{ self.title() }}</h2>
+  <h2 class="page-title">{{ self.title() }}</h2>
   {% if request.endpoint == 'index' %}
-    <div class="getstarted">
+    <div class="getstarted border-radius">
       <p>Learn CloudAcct and get started within your company!</p>
       <a href="{{ url_for('user_guide') }}" class="button">Read the guide</a>
       <a href="{{ url_for('register') }}" class="button">Get started</a>
     </div>
   {% elif request.endpoint == 'show_user' %}
     {% if g.user %}
-      <div class="userconsole">
+      <div class="userconsole border-radius">
         <h3>Projects</h3>
-	{% for project in projects %}
-	  <div class="project">
+        {% for project in projects %}
+	  <div class="project border-radius">
 	    <p>Name: <a href="{{ url_for('.show_project', username=g.user['username'], project_name=project.project_name) }}" >{{ project.project_name }}</a></p>
 	    <p>Company: {{ project.company_name }}</p>
 	    <p>Tax ID: {{ project.tax_id }}</p>

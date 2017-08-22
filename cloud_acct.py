@@ -315,6 +315,12 @@ def logout():
     return redirect(url_for('.index'))
 
 
+@app.route('/case_study')
+def case_study():
+    """Show our successfully applied cases."""
+    return render_template('casestudy.html')
+
+
 port = os.getenv('PORT', '8080')
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(port))

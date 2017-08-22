@@ -1,20 +1,5 @@
-<!doctype html>
-<title>{% block title %}Welcome{% endblock %} | Cloud Accountant</title>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-<div class="page">
-  <h1 id="band">CloudAcct</h1>
-  <div class="navigation">
-    {% if g.user %}
-      <a id="navigation-link" href="{{ url_for('.show_user', username=g.user['username']) }}">my view</a> |
-      <a id="navigation-link" href="{{ url_for('.index') }}">public view</a> |
-      <a id="navigation-link" href="{{ url_for('logout') }}">sign out [{{ g.user.username }}]</a> |
-      <a id="navigation-link" href="{{ url_for('create_project') }}">create project</a>
-    {% else %}
-      <a id="navigation-link" href="{{ url_for('.index') }}">public view</a> |
-      <a id="navigation-link" href="{{ url_for('register') }}">sign up</a> |
-      <a id="navigation-link" href="{{ url_for('login') }}">sign in</a>
-    {% endif %}
-  </div>
+{% extends "layout.html" %}
+{% block body %}
   <div class="body">
     {% if g.user and project %}
       <div class="project_banner">
@@ -22,17 +7,17 @@
 	<a href="{{ url_for('.show_project', username=g.user['username'], project_name=project['project_name']) }}">{{ project['project_name'] }}</a>
       </div>
       <div class="project_toolbar">
-	<a id="toolbar-link" href="{{ url_for('.show_project', username=g.user['username'], project_name=project['project_name']) }}">Detail</a>
-	<a id="toolbar-link" href="{{ url_for('.show_project_settings', username=g.user['username'], project_name=project['project_name'])}}">Settings</a>
+	<a class="toolbar-link" href="{{ url_for('.show_project', username=g.user['username'], project_name=project['project_name']) }}">Detail</a>
+	<a class="toolbar-link" href="{{ url_for('.show_project_settings', username=g.user['username'], project_name=project['project_name'])}}">Settings</a>
       </div>
       {% if request.endpoint == 'show_project' %}
         <div class="project_detail">
 	  <table class="table">
-	    <tr><td class="table" id="cloud-acct-bold">Company</td><td class="table">{{ project['company_name'] }}</td></tr>
-	    <tr><td class="table" id="cloud-acct-bold">Tax ID</td><td class="table">{{ project['tax_id'] }}</td></tr>
-	    <tr><td class="table" id="cloud-acct-bold">Bank</td><td class="table">{{ project['bank_name'] }}</td></tr>
-	    <tr><td class="table" id="cloud-acct-bold">Bank Account</td><td class="table">{{ project['bank_account'] }}</td></tr>
-	    <tr><td class="table" id="cloud-acct-bold">Address</td><td class="table">{{ project['company_address'] }}</td></tr>
+	    <tr><td class="table" class="cloud-acct-bold">Company</td><td class="table">{{ project['company_name'] }}</td></tr>
+	    <tr><td class="table" class="cloud-acct-bold">Tax ID</td><td class="table">{{ project['tax_id'] }}</td></tr>
+	    <tr><td class="table" class="cloud-acct-bold">Bank</td><td class="table">{{ project['bank_name'] }}</td></tr>
+	    <tr><td class="table" class="cloud-acct-bold">Bank Account</td><td class="table">{{ project['bank_account'] }}</td></tr>
+	    <tr><td class="table" class="cloud-acct-bold">Address</td><td class="table">{{ project['company_address'] }}</td></tr>
 	  </table>
 	</div>
       {% elif request.endpoint == 'show_project_settings' or request.endpoint == 'rename_project' %}
@@ -47,16 +32,16 @@
 	      </ul>
 	    {% endif %}
 	  {% endwith %}
-	  <p id="cloud-acct-bold">Project name</p>
+	  <p class="cloud-acct-bold">Project name</p>
 	  <form action="rename" method="post">
-	    <input type="text" name="project_name" size="30" value="{{ request.form.project_name }}">
-	    <input type="submit" value="Rename">
+	    <input type="text" class="border-radius" name="project_name" size="30" value="{{ request.form.project_name }}">
+	    <input type="submit" class="border-radius" value="Rename">
 	  </form>
-	  <p id="cloud-acct-bold">Danger Zone</p>
+	  <p class="cloud-acct-bold">Danger Zone</p>
 	  <div class="danger_zone">
 	    <p>Once you delete a project, there is no going back. Please be certain.</p>
 	    <form action="delete" method="post">
-	      <input type="submit" value="Delete this project">
+	      <input type="submit" class="border-radius" value="Delete this project">
 	    </form>
 	  </div>
 	</div>
@@ -65,7 +50,4 @@
       {% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
     {% endif %}
   </div>
-  <div class="footer">
-    CloudAcct, Powered by Anyware.
-  </div>
-</div>
+{% endblock %}

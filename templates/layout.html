@@ -2,49 +2,23 @@
 <title>{% block title %}Welcome{% endblock %} | Cloud Accountant</title>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 <div class="page">
-  <h1 id="band">CloudAcct</h1>
+  <h1 class="band">CloudAcct</h1>
   <div class="navigation">
     {% if g.user %}
-      <a id="navigation-link" href="{{ url_for('.show_user', username=g.user['username']) }}">my view</a> |
-      <a id="navigation-link" href="{{ url_for('.index') }}">public view</a> |
-      <a id="navigation-link" href="{{ url_for('logout') }}">sign out [{{ g.user.username }}]</a> |
-      <a id="navigation-link" href="{{ url_for('create_project') }}">create project</a>
+      <a class="navigation-link" href="{{ url_for('.show_user', username=g.user['username']) }}">my view</a> |
+      <a class="navigation-link" href="{{ url_for('.index') }}">public view</a> |
+      <a class="navigation-link" href="{{ url_for('logout') }}">sign out [{{ g.user.username }}]</a> |
+      <a class="navigation-link" href="{{ url_for('create_project') }}">create project</a>
     {% else %}
-      <a id="navigation-link" href="{{ url_for('.index') }}">public view</a> |
-      <a id="navigation-link" href="{{ url_for('register') }}">sign up</a> |
-      <a id="navigation-link" href="{{ url_for('login') }}">sign in</a>
+      <a class="navigation-link" href="{{ url_for('.index') }}">public view</a> |
+      <a class="navigation-link" href="{{ url_for('register') }}">sign up</a> |
+      <a class="navigation-link" href="{{ url_for('login') }}">sign in</a> |
+      <a class="navigation-link" href="{{ url_for('case_study') }}">case study</a>
     {% endif %}
   </div>
   <div class="body">
-    <div class="sidebar">
-      <h3>About CloudAcct</h3>
-      <p>CloudAcct is a cloud app for providing accountant service.</p>
-      <h3>Useful link</h3>
-      <ul>
-	<li><a href="{{ url_for('.index') }}">The cloud accountant website</a></li>
-	<li><a href="https://github.com/Ted-Chang/CloudAcct">CloudAcct @ github</a></li>
-	<li><a href="https://github.com/Ted-Chang/CloudAcct/issues">Issue Tracker</a></li>
-      </ul>
-      <div class="searchbox">
-        <h3>Quick Search</h3>
-        <form class="search" method="get">
-          <input type="text" name="quick_search" size="15">
-          <input type="submit" value="Go">
-        </form>
-      </div>
-    </div>
-    <div class="content">
-      {% with flashes = get_flashed_messages() %}
-        {% if flashes %}
-          <ul class="flashes">
-	    {% for message in flashes %}
-	      <li>{{ message }}
-	    {% endfor %}
-	  </ul>
-        {% endif %}
-      {% endwith %}
-      {% block content %}{% endblock %}
-    </div>
+    {% block body %}
+    {% endblock %}
   </div>
   <div class="footer">
     CloudAcct, Powered by Anyware.

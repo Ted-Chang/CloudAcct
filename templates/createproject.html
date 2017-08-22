@@ -1,23 +1,23 @@
-{% extends "layout.html" %}
+{% extends "layout2.html" %}
 {% block title %}Create Project{% endblock %}
 {% block content %}
-  <h2 id="page-title">Create Project</h2>
-  {% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
+  <h2 class="page-title">Create Project</h2>
+  {% if error %}<div class="error border-radius"><strong>Error:</strong> {{ error }}</div>{% endif %}
   <form action="" method="post">
     <dl>
       <dt>Project Name:
-      <dd><input type="text" name="project_name" size="30" value="{{ request.form.project_name }}">
+      <dd><input type="text" class="border-radius" name="project_name" size="30" value="{{ request.form.project_name }}">
       <dt>Company Name:
-      <dd><input type="text" name="company_name" size="30" value="{{ request.form.company_name }}">
+      <dd><input type="text" class="border-radius" name="company_name" size="30" value="{{ request.form.company_name }}">
       <dt>Tax ID:
-      <dd><input type="text" name="tax_id" size="30" value="{{ request.form.tax_id }}">
+      <dd><input type="text" class="border-radius" name="tax_id" size="30" value="{{ request.form.tax_id }}">
       <dt>Bank Name:
-      <dd><input type="text" name="bank_name" size="30" value="{{ request.form.bank_name }}">
+      <dd><input type="text" class="border-radius" name="bank_name" size="30" value="{{ request.form.bank_name }}">
       <dt>Bank Account:
-      <dd><input type="text" name="bank_account" size="30" value="{{ request.form.bank_account }}">
+      <dd><input type="text" class="border-radius" name="bank_account" size="30" value="{{ request.form.bank_account }}">
       <dt>Company Address:
-      <dd><input type="text" name="company_address" size="30" value="{{ request.form.company_address }}">
+      <dd><input type="text" class="border-radius" name="company_address" size="30" value="{{ request.form.company_address }}">
     </dl>
-    <div class="action"><input type="submit" value="Create"></div>
+    <div class="action"><input type="submit" class="border-radius" value="Create"></div>
   </form>
 {% endblock %}
