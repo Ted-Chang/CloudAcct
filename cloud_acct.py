@@ -299,7 +299,7 @@ def forget_passwd():
         else:
             db = get_db()
             new_passwd = '123456' # Replace this with random password
-            db.execute('''update user set pw_hash = ? where username = ?''', 
+            db.execute('''update users set pw_hash = ? where username = ?''', 
                        [generate_password_hash(new_passwd), 
                         request.form['username']])
             db.commit()
