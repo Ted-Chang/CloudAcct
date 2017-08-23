@@ -1,53 +1,51 @@
 {% extends "layout.html" %}
 {% block body %}
-  <div class="body">
-    {% if g.user and project %}
-      <div class="project_banner">
-	<a href="{{ url_for('.show_user', username=g.user['username']) }}" >{{ g.user.username }}</a>/
-	<a href="{{ url_for('.show_project', username=g.user['username'], project_name=project['project_name']) }}">{{ project['project_name'] }}</a>
+  {% if g.user and project %}
+    <div class="project_banner">
+      <a href="{{ url_for('.show_user', username=g.user['username']) }}" >{{ g.user.username }}</a>/
+      <a href="{{ url_for('.show_project', username=g.user['username'], project_name=project['project_name']) }}">{{ project['project_name'] }}</a>
+    </div>
+    <div class="project_toolbar">
+      <a class="toolbar-link" href="{{ url_for('.show_project', username=g.user['username'], project_name=project['project_name']) }}">Detail</a>
+      <a class="toolbar-link" href="{{ url_for('.show_project_settings', username=g.user['username'], project_name=project['project_name'])}}">Settings</a>
+    </div>
+    {% if request.endpoint == 'show_project' %}
+      <div class="project_detail">
+	<table class="table">
+	  <tr><td class="table" class="cloud-acct-bold">Company</td><td class="table">{{ project['company_name'] }}</td></tr>
+	  <tr><td class="table" class="cloud-acct-bold">Tax ID</td><td class="table">{{ project['tax_id'] }}</td></tr>
+	  <tr><td class="table" class="cloud-acct-bold">Bank</td><td class="table">{{ project['bank_name'] }}</td></tr>
+	  <tr><td class="table" class="cloud-acct-bold">Bank Account</td><td class="table">{{ project['bank_account'] }}</td></tr>
+	  <tr><td class="table" class="cloud-acct-bold">Address</td><td class="table">{{ project['company_address'] }}</td></tr>
+	</table>
       </div>
-      <div class="project_toolbar">
-	<a class="toolbar-link" href="{{ url_for('.show_project', username=g.user['username'], project_name=project['project_name']) }}">Detail</a>
-	<a class="toolbar-link" href="{{ url_for('.show_project_settings', username=g.user['username'], project_name=project['project_name'])}}">Settings</a>
-      </div>
-      {% if request.endpoint == 'show_project' %}
-        <div class="project_detail">
-	  <table class="table">
-	    <tr><td class="table" class="cloud-acct-bold">Company</td><td class="table">{{ project['company_name'] }}</td></tr>
-	    <tr><td class="table" class="cloud-acct-bold">Tax ID</td><td class="table">{{ project['tax_id'] }}</td></tr>
-	    <tr><td class="table" class="cloud-acct-bold">Bank</td><td class="table">{{ project['bank_name'] }}</td></tr>
-	    <tr><td class="table" class="cloud-acct-bold">Bank Account</td><td class="table">{{ project['bank_account'] }}</td></tr>
-	    <tr><td class="table" class="cloud-acct-bold">Address</td><td class="table">{{ project['company_address'] }}</td></tr>
-	  </table>
-	</div>
-      {% elif request.endpoint == 'show_project_settings' or request.endpoint == 'rename_project' %}
-	<div class="project_settings">
-	  {% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
-	  {% with flashes = get_flashed_messages() %}
-	    {% if flashes %}
-	      <ul class="flashes">
-		{% for message in flashes %}
-		  <li>{{ message }}
-		{% endfor %}
-	      </ul>
-	    {% endif %}
-	  {% endwith %}
-	  <p class="cloud-acct-bold">Project name</p>
-	  <form action="rename" method="post">
-	    <input type="text" class="border-radius" name="project_name" size="30" value="{{ request.form.project_name }}">
-	    <input type="submit" class="border-radius" value="Rename">
+    {% elif request.endpoint == 'show_project_settings' or request.endpoint == 'rename_project' %}
+      <div class="project_settings">
+	{% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
+	{% with flashes = get_flashed_messages() %}
+	  {% if flashes %}
+	    <ul class="flashes">
+	      {% for message in flashes %}
+	        <li>{{ message }}
+	      {% endfor %}
+	    </ul>
+	  {% endif %}
+	{% endwith %}
+	<p class="cloud-acct-bold">Project name</p>
+	<form action="rename" method="post">
+	  <input type="text" class="border-radius" name="project_name" size="30" value="{{ request.form.project_name }}">
+	  <input type="submit" class="border-radius" value="Rename">
+	</form>
+	<p class="cloud-acct-bold">Danger Zone</p>
+	<div class="danger_zone">
+	  <p>Once you delete a project, there is no going back. Please be certain.</p>
+	  <form action="delete" method="post">
+	    <input type="submit" class="border-radius" value="Delete this project">
 	  </form>
-	  <p class="cloud-acct-bold">Danger Zone</p>
-	  <div class="danger_zone">
-	    <p>Once you delete a project, there is no going back. Please be certain.</p>
-	    <form action="delete" method="post">
-	      <input type="submit" class="border-radius" value="Delete this project">
-	    </form>
-	  </div>
 	</div>
-      {% endif %}
-    {% else %}
-      {% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
+      </div>
     {% endif %}
-  </div>
+  {% else %}
+    {% if error %}<div class="error"><strong>Error:</strong> {{ error }}</div>{% endif %}
+  {% endif %}
 {% endblock %}

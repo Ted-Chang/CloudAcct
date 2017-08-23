@@ -16,7 +16,7 @@ from flask import Flask, request, render_template, g, redirect, \
 from werkzeug import generate_password_hash, check_password_hash
 
 # Configuration
-DATABASE = '/tmp/cloud_acct.db'
+DATABASE = 'cloud_acct.db'
 DEBUG = True
 SECRET_KEY = b'_6#y9L"F7Q3z\n\xec]/'
 
@@ -75,13 +75,14 @@ def format_datetime(timestamp):
 
 def get_user_id(username):
     """Look up the id for a username."""
-    ret = query_db('select user_id from user where username = ?',
+    ret = query_db('select user_id from users where username = ?',
                    [username], one=True)
     return ret[0] if ret else None
 
+
 def get_project_id(user_id, project_name):
     """Look up the id for a project of the specified user."""
-    ret = query_db('''select project_id from project where owner_id = ?
+    ret = query_db('''select project_id from projects where owner_id = ?
                    and project_name = ?''', 
                    [user_id, project_name], one=True)
     return ret[0] if ret else None
@@ -91,7 +92,7 @@ def get_project_id(user_id, project_name):
 def before_request():
     g.user = None
     if 'user_id' in session:
-        g.user = query_db('select * from user where user_id = ?', 
+        g.user = query_db('select * from users where user_id = ?', 
                           [session['user_id']], one=True)
 
 
@@ -132,7 +133,7 @@ def register():
             error = 'The username is already taken'
         else:
             db = get_db()
-            db.execute('''insert into user (
+            db.execute('''insert into users (
                        username, email, pw_hash) values (?, ?, ?)''', 
                        [request.form['username'], request.form['email'],
                         generate_password_hash(request.form['password'])])
@@ -160,7 +161,7 @@ def create_project():
             error = 'The project name is already taken'
         else:
             db = get_db()
-            db.execute('''insert into project (
+            db.execute('''insert into projects (
                        project_name, owner_id, company_name, tax_id, bank_name, bank_account, company_address)
                        values (?, ?, ?, ?, ?, ?, ?)''', 
                        [request.form['project_name'], session['user_id'], 
@@ -179,7 +180,7 @@ def show_user(username):
     if not g.user or g.user['username'] != username:
         return redirect(url_for('login'))
     projects = query_db('''
-        select * from project where owner_id = ?''', 
+        select * from projects where owner_id = ?''', 
                         [session['user_id']])
     return render_template('view.html', projects=projects)
 
@@ -190,7 +191,7 @@ def show_project(username, project_name):
     if not g.user or g.user['username'] != username:
         return redirect(url_for('login'))
     project = query_db('''
-        select * from project
+        select * from projects
         where owner_id = ? and project_name = ?''',
                      [session['user_id'], project_name])
     if not project:
@@ -205,7 +206,7 @@ def show_project_settings(username, project_name):
     if not g.user or g.user['username'] != username:
         return redirect(url_for('login'))
     project = query_db('''
-        select * from project
+        select * from projects
         where owner_id = ? and project_name = ?''',
                        [session['user_id'], project_name])
     if not project:
@@ -220,7 +221,7 @@ def rename_project(username, project_name):
         return redirect(url_for('login'))
     error = None
     project = query_db('''
-        select * from project
+        select * from projects
         where owner_id = ? and project_name = ?''',
                        [session['user_id'], project_name])
     if not project:
@@ -233,7 +234,7 @@ def rename_project(username, project_name):
         else:
             new_project_name = request.form['project_name']
             db = get_db()
-            db.execute('''update project set project_name = ?
+            db.execute('''update projects set project_name = ?
                           where owner_id = ? and project_name = ?''', 
                        [new_project_name, session['user_id'], project_name])
             db.commit()
@@ -252,7 +253,7 @@ def delete_project(username, project_name):
         abort(404)
     else:
         db = get_db()
-        db.execute('''delete from project
+        db.execute('''delete from projects
                       where owner_id = ? and project_name = ?''',
                    [session['user_id'], project_name])
         db.commit()
@@ -267,7 +268,7 @@ def login():
         return redirect(url_for('.show_user', username=g.user['username']))
     error = None
     if request.method == 'POST':
-        user = query_db('''select * from user where username = ?''',
+        user = query_db('''select * from users where username = ?''',
                         [request.form['username']], one=True)
         if user is None:
             error = 'Invalid username'
@@ -291,7 +292,7 @@ def forget_passwd():
         elif get_user_id(request.form['username']) is None:
             error = 'User not exists!'
         elif not request.form['email']:
-            email = query_db('''select email from user where username = ?''',
+            email = query_db('''select email from users where username = ?''',
                              [request.form['username']], one=True)
             if email != request.form['email']:
                 error = 'Email address not match!'
@@ -321,6 +322,6 @@ def case_study():
     return render_template('casestudy.html')
 
 
-port = os.getenv('PORT', '8080')
+port = os.getenv('PORT', '80')
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(port))

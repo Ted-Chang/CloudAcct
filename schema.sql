@@ -1,13 +1,13 @@
-drop table if exists user;
-create table user (
+drop table if exists users;
+create table users (
   user_id integer primary key autoincrement,
   username text not null,
   email text not null,
   pw_hash text not null
 );
 
-drop table if exists project;
-create table project (
+drop table if exists projects;
+create table projects (
   project_id integer primary key autoincrement,
   project_name text not null,
   owner_id integer not null,

@@ -101,7 +101,6 @@ div.page div.navigation {
 }
 
 div.page div.body {
-    margin: 0 0 15px;
     padding: 0;
     overflow: hidden;
 }
@@ -125,9 +124,9 @@ div.page div.body div.sidebar div.searchbox {
 }
 
 div.page div.body div.content {
-    margin: 0 0 15px;
     padding: 0;
     overflow: hidden;
+    margin-bottom: 15px;
 }
 
 div.page div.body div.project_banner {
@@ -190,7 +189,7 @@ div.page div.body div.content div.userconsole div.project {
 }
 
 div.error {
-    margin: 10px 0;
+    margin-right: 10px;
     background: #FAE4E4;
     border: 1px solid #DD6F6F;
     padding: 4px;
