@@ -5,8 +5,6 @@
     copyright(c) 2017 Ted Zhang.
     All rights reserved.
 """
-from cloud_acct import query_db
-
 def run_test_cases():
     print "Test cases passed!"
 
